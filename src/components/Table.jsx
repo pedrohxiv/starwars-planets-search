@@ -25,17 +25,31 @@ export default function Table() {
 
   const handleFilter = () => {
     setFilter({ ...filter, name: '' });
-    setPlanetsFiltered(
-      planets.filter((planet) => {
-        if (filter.comparison === 'maior que') {
-          return +planet[filter.column] > +filter.value;
-        }
-        if (filter.comparison === 'menor que') {
-          return +planet[filter.column] < +filter.value;
-        }
-        return +planet[filter.column] === +filter.value;
-      }),
-    );
+    if (planetsFiltered.length === 0) {
+      setPlanetsFiltered(
+        planets.filter((planet) => {
+          if (filter.comparison === 'maior que') {
+            return +planet[filter.column] > +filter.value;
+          }
+          if (filter.comparison === 'menor que') {
+            return +planet[filter.column] < +filter.value;
+          }
+          return +planet[filter.column] === +filter.value;
+        }),
+      );
+    } else {
+      setPlanetsFiltered(
+        planetsFiltered.filter((planet) => {
+          if (filter.comparison === 'maior que') {
+            return +planet[filter.column] > +filter.value;
+          }
+          if (filter.comparison === 'menor que') {
+            return +planet[filter.column] < +filter.value;
+          }
+          return +planet[filter.column] === +filter.value;
+        }),
+      );
+    }
   };
 
   return (
