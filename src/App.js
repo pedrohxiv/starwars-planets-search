@@ -1,3 +1,9 @@
+import Table from './components/Table';
+
 export default function App() {
-  return <div>Hello, App!</div>;
+  return (
+    <div>
+      <Table />
+    </div>
+  );
 }
