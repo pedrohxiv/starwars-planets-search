@@ -9,6 +9,7 @@ export default function Table() {
     value: '0',
   });
   const [planetsFiltered, setPlanetsFiltered] = useState([]);
+  const [filterByNumericValues, setFilterByNumericValues] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +25,14 @@ export default function Table() {
   }, []);
 
   const handleFilter = () => {
-    setFilter({ ...filter, name: '' });
+    setFilterByNumericValues([
+      ...filterByNumericValues,
+      {
+        column: filter.column,
+        comparison: filter.comparison,
+        value: filter.value,
+      },
+    ]);
     if (planetsFiltered.length === 0) {
       setPlanetsFiltered(
         planets.filter((planet) => {
@@ -50,7 +58,21 @@ export default function Table() {
         }),
       );
     }
+    setFilter({
+      name: '',
+      column: 'population',
+      comparison: 'maior que',
+      value: '0',
+    });
   };
+
+  const columnFiltersOptions = [
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ];
 
   return (
     <div>
@@ -75,11 +97,23 @@ export default function Table() {
             data-testid="column-filter"
             onChange={ ({ target }) => setFilter({ ...filter, column: target.value }) }
           >
-            <option value="population">population</option>
-            <option value="orbital_period">orbital_period</option>
-            <option value="diameter">diameter</option>
-            <option value="rotation_period">rotation_period</option>
-            <option value="surface_water">surface_water</option>
+            {filterByNumericValues.length === 0
+              ? columnFiltersOptions.map((columnFilter) => (
+                <option key={ columnFilter } value={ `${columnFilter}` }>
+                  {columnFilter}
+                </option>
+              ))
+              : columnFiltersOptions
+                .filter(
+                  (columnFiltersOption) => !filterByNumericValues
+                    .map((filterByNumericValue) => filterByNumericValue.column)
+                    .includes(columnFiltersOption),
+                )
+                .map((columnFilter) => (
+                  <option key={ columnFilter } value={ `${columnFilter}` }>
+                    {columnFilter}
+                  </option>
+                ))}
           </select>
         </label>
         <label htmlFor="comparison-filter">
