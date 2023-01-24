@@ -1,78 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
+import { TableContext } from '../context/TableProvider';
 
 export default function Table() {
-  const [planets, setPlanets] = useState([]);
-  const [filter, setFilter] = useState({
-    name: '',
-    column: 'population',
-    comparison: 'maior que',
-    value: '0',
-  });
-  const [planetsFiltered, setPlanetsFiltered] = useState([]);
-  const [filterByNumericValues, setFilterByNumericValues] = useState([]);
+  const {
+    setDefaultPlanets,
+    planets,
+    setPlanets,
+    filterOptions,
+    filter,
+    setFilter,
+    filterList,
+    order,
+    setOrder,
+    handleFilter,
+    handleRemoveFilter,
+    handleRemoveAllFilters,
+    handleSort,
+  } = useContext(TableContext);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPlanets = async () => {
       const resp = await fetch('https://swapi.dev/api/planets');
       const { results } = await resp.json();
-      const planetsList = results.map((result) => {
+      const fetchedPlanetsList = results.map((result) => {
         const { residents, ...planet } = result;
         return planet;
       });
-      setPlanets(planetsList);
+      setDefaultPlanets(fetchedPlanetsList);
+      setPlanets(fetchedPlanetsList);
     };
-    fetchData();
-  }, []);
-
-  const handleFilter = () => {
-    setFilterByNumericValues([
-      ...filterByNumericValues,
-      {
-        column: filter.column,
-        comparison: filter.comparison,
-        value: filter.value,
-      },
-    ]);
-    if (planetsFiltered.length === 0) {
-      setPlanetsFiltered(
-        planets.filter((planet) => {
-          if (filter.comparison === 'maior que') {
-            return +planet[filter.column] > +filter.value;
-          }
-          if (filter.comparison === 'menor que') {
-            return +planet[filter.column] < +filter.value;
-          }
-          return +planet[filter.column] === +filter.value;
-        }),
-      );
-    } else {
-      setPlanetsFiltered(
-        planetsFiltered.filter((planet) => {
-          if (filter.comparison === 'maior que') {
-            return +planet[filter.column] > +filter.value;
-          }
-          if (filter.comparison === 'menor que') {
-            return +planet[filter.column] < +filter.value;
-          }
-          return +planet[filter.column] === +filter.value;
-        }),
-      );
-    }
-    setFilter({
-      name: '',
-      column: 'population',
-      comparison: 'maior que',
-      value: '0',
-    });
-  };
-
-  const columnFiltersOptions = [
-    'population',
-    'orbital_period',
-    'diameter',
-    'rotation_period',
-    'surface_water',
-  ];
+    fetchPlanets();
+  }, [setDefaultPlanets, setPlanets]);
 
   return (
     <div>
@@ -81,10 +39,7 @@ export default function Table() {
           type="text"
           data-testid="name-filter"
           value={ filter.name }
-          onChange={ ({ target }) => {
-            setFilter({ ...filter, name: target.value });
-            setPlanetsFiltered([]);
-          } }
+          onChange={ ({ target }) => setFilter({ ...filter, name: target.value }) }
         />
       </div>
       <div>
@@ -93,27 +48,14 @@ export default function Table() {
           <select
             name="column-filter"
             id="column-filter"
-            value={ filter.column }
             data-testid="column-filter"
             onChange={ ({ target }) => setFilter({ ...filter, column: target.value }) }
           >
-            {filterByNumericValues.length === 0
-              ? columnFiltersOptions.map((columnFilter) => (
-                <option key={ columnFilter } value={ `${columnFilter}` }>
-                  {columnFilter}
-                </option>
-              ))
-              : columnFiltersOptions
-                .filter(
-                  (columnFiltersOption) => !filterByNumericValues
-                    .map((filterByNumericValue) => filterByNumericValue.column)
-                    .includes(columnFiltersOption),
-                )
-                .map((columnFilter) => (
-                  <option key={ columnFilter } value={ `${columnFilter}` }>
-                    {columnFilter}
-                  </option>
-                ))}
+            {filterOptions.map((filterOption) => (
+              <option key={ filterOption } value={ filterOption }>
+                {filterOption}
+              </option>
+            ))}
           </select>
         </label>
         <label htmlFor="comparison-filter">
@@ -121,7 +63,6 @@ export default function Table() {
           <select
             name="comparison-filter"
             id="comparison-filter"
-            value={ filter.comparison }
             data-testid="comparison-filter"
             onChange={ ({ target }) => (
               setFilter({ ...filter, comparison: target.value })) }
@@ -144,6 +85,66 @@ export default function Table() {
         >
           Filtrar
         </button>
+        <select
+          name="column-sort"
+          id="column-sort"
+          data-testid="column-sort"
+          onChange={ ({ target }) => setOrder({ ...order, column: target.value }) }
+        >
+          <option value="population">population</option>
+          <option value="orbital_period">orbital_period</option>
+          <option value="diameter">diameter</option>
+          <option value="rotation_period">rotation_period</option>
+          <option value="surface_water">surface_water</option>
+        </select>
+        <label htmlFor="column-sort-input-asc">
+          ASC
+          <input
+            type="radio"
+            id="column-sort-input-asc"
+            data-testid="column-sort-input-asc"
+            value="ASC"
+            checked={ order.sort === 'ASC' }
+            onChange={ () => setOrder({ ...order, sort: 'ASC' }) }
+          />
+        </label>
+        <label htmlFor="column-sort-input-desc">
+          DESC
+          <input
+            type="radio"
+            id="column-sort-input-desc"
+            data-testid="column-sort-input-desc"
+            value="DESC"
+            checked={ order.sort === 'DESC' }
+            onChange={ () => setOrder({ ...order, sort: 'DESC' }) }
+          />
+        </label>
+        <button
+          type="button"
+          data-testid="column-sort-button"
+          onClick={ handleSort }
+        >
+          Ordenar
+        </button>
+        <div>
+          {filterList.map((filterSelected) => (
+            <div key={ filterSelected.column } data-testid="filter">
+              <p>{filterSelected.comparison}</p>
+              <p>{filterSelected.value}</p>
+              <p>{filterSelected.column}</p>
+              <button onClick={ () => handleRemoveFilter(filterSelected) }>
+                X
+              </button>
+            </div>
+          ))}
+          <button
+            data-testid="button-remove-filters"
+            type="button"
+            onClick={ handleRemoveAllFilters }
+          >
+            Remover Filtros
+          </button>
+        </div>
       </div>
 
       <table>
@@ -165,29 +166,11 @@ export default function Table() {
           </tr>
         </thead>
         <tbody>
-          {planetsFiltered.length === 0
-            ? planets
-              .filter(({ name }) => name.includes(filter.name))
-              .map((planet) => (
-                <tr key={ planet.name }>
-                  <td>{planet.name}</td>
-                  <td>{planet.rotation_period}</td>
-                  <td>{planet.orbital_period}</td>
-                  <td>{planet.diameter}</td>
-                  <td>{planet.climate}</td>
-                  <td>{planet.gravity}</td>
-                  <td>{planet.terrain}</td>
-                  <td>{planet.surface_water}</td>
-                  <td>{planet.population}</td>
-                  <td>{planet.films}</td>
-                  <td>{planet.created}</td>
-                  <td>{planet.edited}</td>
-                  <td>{planet.url}</td>
-                </tr>
-              ))
-            : planetsFiltered.map((planet) => (
+          {planets
+            .filter(({ name }) => name.includes(filter.name))
+            .map((planet) => (
               <tr key={ planet.name }>
-                <td>{planet.name}</td>
+                <td data-testid="planet-name">{planet.name}</td>
                 <td>{planet.rotation_period}</td>
                 <td>{planet.orbital_period}</td>
                 <td>{planet.diameter}</td>

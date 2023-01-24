@@ -1,9 +1,12 @@
 import Table from './components/Table';
+import TableProvider from './context/TableProvider';
 
 export default function App() {
   return (
     <div>
-      <Table />
+      <TableProvider>
+        <Table />
+      </TableProvider>
     </div>
   );
 }
