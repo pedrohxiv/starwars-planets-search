@@ -1,0 +1,251 @@
+body {
+  background-color: rgb(50, 50, 50);
+  background-image: url('./images/fundo-star-wars.png');
+  font-family: Epilogue , sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  mix-blend-mode: normal;
+}
+
+.image_container {
+  display: flex;
+  justify-content: center;
+}
+
+.image_logo {
+  margin-top: 150px;
+  position: relative;
+}
+
+.image_graphism {
+  position: absolute;
+}
+
+.table_container {
+  border: 1px solid white;
+  border-radius: 20px;
+  margin: 365px 30px 30px;
+}
+
+.filters_container {
+  display: flex;
+  flex-direction: column;
+  margin: 60px 30px;
+}
+
+.first_row_filters_options_container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.name_filter {
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 5px;
+  color: white;
+  font-family: Epilogue , sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  height: 42px;
+  line-height: 18px;
+  text-align: center;
+  width: 70%;
+}
+
+.icon_search {
+  left: 79%;
+  margin-top: 10px;
+  position: absolute;
+}
+
+.second_row_filters_options_container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 40px;
+}
+
+.column_filter_label {
+  color: #aeaeae;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  margin: 0 20px;
+}
+
+.column_filter_select {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+  font-family: Epilogue , sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+  margin-top: 10px;
+  padding: 8px 0;
+  width: 140px;
+}
+
+.column_filter_option {
+  background-color: rgb(14, 14, 14);
+}
+
+.comparison_filter_label {
+  color: #aeaeae;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  margin: 0 20px;
+}
+
+.comparison_filter_select {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+  font-family: Epilogue , sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+  margin-top: 10px;
+  padding: 8px 0;
+  width: 110px;
+}
+
+.comparison_filter_option {
+  background-color: rgb(14, 14, 14);
+}
+
+.value_filter_input {
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 5px;
+  color: white;
+  font-family: Epilogue , sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+  margin: 0 20px;
+  padding: 10px;
+  width: 70px;
+}
+
+.value_filter_input::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+.button_filter {
+  background-color: transparent;
+  border: 1px solid #fae60a;
+  border-radius: 5px;
+  color: #fae60a;
+  font-family: Epilogue , sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+  margin: 0 20px;
+  padding: 30px 15px;
+  text-transform: uppercase;
+}
+
+.column_sort_label {
+  color: #aeaeae;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  margin: 0 20px;
+}
+
+.column_sort_select {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+  font-family: Epilogue , sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+  margin-top: 10px;
+  padding: 8px 0;
+  width: 140px;
+}
+
+.column_sort_option {
+  background-color: rgb(14, 14, 14);
+}
+
+.column_sort_inputs_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.column_sort_input_asc_label, .column_sort_input_desc_label {
+  align-items: center;
+  color: white;
+  display: flex;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+  margin: 10px 20px;
+}
+
+.column_sort_input_asc, .column_sort_input_desc {
+  appearance: none;
+  border: 0.15em solid #aeaeae;
+  border-radius: 50%;
+  color: #fae60a;
+  display: grid;
+  font: inherit;
+  height: 1.15rem;
+  margin: 0 10px;
+  place-content: center;
+  transform: translateY(-0.075em);
+  width: 1.15rem;
+}
+
+.column_sort_input_asc:before, .column_sort_input_desc:before {
+  background-color: #fae60a;
+  border-radius: 50%;
+  box-shadow: inset 1em 1em #fae60a;
+  content: '';
+  height: 0.65em;
+  transform: scale(0);
+  width: 0.65em;
+}
+
+.column_sort_input_asc:checked:before, .column_sort_input_desc:checked:before {
+  border: 0.15em solid #aeaeae;
+  transform: scale(1);
+}
+
+.column_sort_input_asc:focus, .column_sort_input_desc:focus {
+  outline: max(2px, 0.15em) solid #fae60a;
+}
+
+.column_sort_input_asc:focus-within, .column_sort_input_desc:focus-within {
+  color: #fae60a;
+}
+
+.column_sort_button {
+  background-color: transparent;
+  border: 1px solid #fae60a;
+  border-radius: 5px;
+  color: #fae60a;
+  font-family: Epilogue , sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+  margin: 0 20px;
+  padding: 30px 15px;
+  text-transform: uppercase;
+}
