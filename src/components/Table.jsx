@@ -4,6 +4,7 @@ import logoImg from '../images/logo-star-wars.png';
 import grafismoImg from '../images/grafismo-topo.png';
 import SecondRowFiltersOptions from './SecondRowFiltersOptions';
 import FirstRowFiltersOptions from './FirstRowFiltersOptions';
+import TableHead from './TableHead';
 
 export default function Table() {
   const {
@@ -40,7 +41,7 @@ export default function Table() {
           className="image_graphism"
         />
       </div>
-      <div className="table_container">
+      <div className="table_and_filters_container">
         <div className="filters_container">
           <div className="first_row_filters_options_container">
             <FirstRowFiltersOptions />
@@ -49,23 +50,31 @@ export default function Table() {
             <SecondRowFiltersOptions />
           </div>
           <div
-            style={
+            className={
               filterList.length === 0
-                ? { display: 'none' }
-                : { display: 'inline' }
+                ? 'hidden_filters_container'
+                : 'show_filters_container'
             }
           >
             {filterList.map((filterSelected) => (
-              <div key={ filterSelected.column } data-testid="filter">
-                <p>{filterSelected.comparison}</p>
-                <p>{filterSelected.value}</p>
-                <p>{filterSelected.column}</p>
-                <button onClick={ () => handleRemoveFilter(filterSelected) }>
+              <div
+                className="filter_container"
+                key={ filterSelected.column }
+                data-testid="filter"
+              >
+                <p className="filter_text">{filterSelected.column}</p>
+                <p className="filter_text">{filterSelected.comparison}</p>
+                <p className="filter_text">{filterSelected.value}</p>
+                <button
+                  className="filter_button"
+                  onClick={ () => handleRemoveFilter(filterSelected) }
+                >
                   X
                 </button>
               </div>
             ))}
             <button
+              className="button_remove_filters"
               data-testid="button-remove-filters"
               type="button"
               onClick={ handleRemoveAllFilters }
@@ -75,50 +84,32 @@ export default function Table() {
           </div>
         </div>
 
-        <table>
-          <thead>
-            <tr>
-              {[
-                'Name',
-                'Rotation Period',
-                'Orbital Period',
-                'Diameter',
-                'Climate',
-                'Gravity',
-                'Terrain',
-                'Surface Water',
-                'Population',
-                'Films',
-                'Created',
-                'Edited',
-                'URL',
-              ].map((tableHead) => (
-                <th key={ tableHead }>{tableHead}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {planets
-              .filter(({ name }) => name.includes(filter.name))
-              .map((planet) => (
-                <tr key={ planet.name }>
-                  <td data-testid="planet-name">{planet.name}</td>
-                  <td>{planet.rotation_period}</td>
-                  <td>{planet.orbital_period}</td>
-                  <td>{planet.diameter}</td>
-                  <td>{planet.climate}</td>
-                  <td>{planet.gravity}</td>
-                  <td>{planet.terrain}</td>
-                  <td>{planet.surface_water}</td>
-                  <td>{planet.population}</td>
-                  <td>{planet.films}</td>
-                  <td>{planet.created}</td>
-                  <td>{planet.edited}</td>
-                  <td>{planet.url}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className="table_container">
+          <table>
+            <TableHead />
+            <tbody>
+              {planets
+                .filter(({ name }) => name.includes(filter.name))
+                .map((planet) => (
+                  <tr key={ planet.name }>
+                    <td data-testid="planet-name">{planet.name}</td>
+                    <td>{planet.rotation_period}</td>
+                    <td>{planet.orbital_period}</td>
+                    <td>{planet.diameter}</td>
+                    <td>{planet.climate}</td>
+                    <td>{planet.gravity}</td>
+                    <td>{planet.terrain}</td>
+                    <td>{planet.surface_water}</td>
+                    <td>{planet.population}</td>
+                    <td>{planet.films}</td>
+                    <td>{planet.created}</td>
+                    <td>{planet.edited}</td>
+                    <td>{planet.url}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );
